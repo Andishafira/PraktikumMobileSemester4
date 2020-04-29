@@ -2,10 +2,13 @@ package com.example.m5coba4;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DataParser {
     private HashMap<String, String> getPlace(JSONObject googlePlaceJson){
@@ -45,5 +48,36 @@ public class DataParser {
         }
         return googlePlaceMap;
 
+    }
+
+    private List<HashMap<String, String>> getPlaces(JSONArray jsonArray){
+        int count = jsonArray.length();
+        List<HashMap<String, String>> placelist = new ArrayList<>();
+        HashMap<String, String> placeMap = null;
+        for(int i = 0; i<count;i++) {
+            try {
+                placeMap = getPlace((JSONObject) jsonArray.get(i));
+                placelist.add(placeMap);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return placelist;
+    }
+
+    public List<HashMap<String, String>> parse(String jsonData)
+    {
+        JSONArray jsonArray = null;
+        JSONObject jsonObject;
+
+        Log.d("json data", jsonData);
+
+        try {
+            jsonObject = new JSONObject(jsonData);
+            jsonArray = jsonObject.getJSONArray("results");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getPlaces(jsonArray);
     }
 }
