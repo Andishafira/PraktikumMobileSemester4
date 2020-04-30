@@ -162,20 +162,20 @@ if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCAT
     @Override
     public void onLocationChanged(Location location) {
         lastlocation = location;
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
         }
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
+        Log.d("lat = ",""+latitude);
+        LatLng latLng = new LatLng(location.getLatitude() , location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         currentLocationMarker = mMap.addMarker(markerOptions);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng((latLng)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
         if(client != null){
